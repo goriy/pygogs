@@ -21,7 +21,7 @@ from separate file.
 Usage of separate file with token is more preferrable for several reasons:
 
 * your script could be in repository (even in public one) without revealing authorization info
-* separate file with token could have different (i.e. more restricted) premissions
+* separate file with token could have different (i.e. more restricted) file permissions
 * file with token could be ignored by version control systems (.gitignore, .hgignore, ...)
 
 *pygogs* sends Access Token as a header.
