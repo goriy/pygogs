@@ -24,9 +24,9 @@ Usage of separate file with token is more preferrable for several reasons:
 * separate file with token could have different (i.e. more restricted) file permissions
 * file with token could be ignored by version control systems (.gitignore, .hgignore, ...)
 
-*pygogs* sends Access Token as a header.
+*pygogs* sends Access Token as a http(s) header.
 
-Server response is data in *json* format, so it loaded by means of python's json.loads()
+Server response is data in *json* format, so it's loaded by means of python's json.loads()
 
 ### In your script
 
