@@ -36,7 +36,7 @@ Simple script example:
     import pygogs
 
     # create helper class
-    pg = pygogs()
+    pg = pygogs.pygogs()
 
     # set verbosity level. 0 - quiet, 1 - print some information
     pg.verbosity(1)
