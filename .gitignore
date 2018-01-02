@@ -102,3 +102,4 @@ ENV/
 
 # .token files
 *.token
+__*.py
