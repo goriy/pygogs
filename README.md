@@ -32,6 +32,7 @@ Server response is data in *json* format, so it loaded by means of python's json
 
 Simple script example:
 
+```python
     import pygogs
 
     # create helper class
@@ -60,3 +61,4 @@ Simple script example:
 
     # create public organization repository
     result = pg.create_organization_repo ('OCPCorp', 'project2', 'Mega Ultra Super project', False)
+```
