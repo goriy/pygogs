@@ -6,18 +6,19 @@ import json
 class pygogs(object):
   __slots__ = [# private variables
                "__verbosity",
+               "__hdrs",
                # public variables
                "token",
                "server_url",
-               "__hdrs",
                "lastcode"
                ]
 
   ################################################################################
   def __init__(self):
     self.__verbosity = 0
-    self.server_url = ""
-
+    self.server_url = ''
+    self.token = ''
+    self.__hdrs = {'Authorization': 'token 123'}
     os.linesep = '\n'
 
   ################################################################################
@@ -41,7 +42,7 @@ class pygogs(object):
     self.server_url = new_url + '/api/v1'
 
   ################################################################################
-  def process_response(self, r, desired_code = 200):
+  def __process_response(self, r, desired_code = 200):
     self.lastcode = r.status_code
     if (r.status_code == desired_code):
       if (r.headers['content-type'][:16] == 'application/json'):
@@ -65,64 +66,64 @@ class pygogs(object):
   def list_your_organizations (self):
     url = self.server_url + '/user/orgs'
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def list_your_repositories (self):
     url = self.server_url + '/user/repos'
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def list_user_organizations (self, username):
     url = self.server_url + '/users/'+ username +'/orgs'
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def list_user_repositories (self, username):
     url = self.server_url + '/users/'+ username +'/repos'
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def get_organization (self, orgname):
     url = self.server_url + '/orgs/'+ orgname
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def get_repository(self, owner, repo):
     url = self.server_url + '/repos/' + owner + '/' + repo
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def create_new_organization(self, username, orgname, full_name, description, website, location):
     url = self.server_url + '/admin/users/' + username  + '/orgs'
     payload = {'UserName': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
     r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r, 201)
+    return self.__process_response(r, 201)
 
   ################################################################################
   def edit_an_organization(self, orgname, full_name, description, website, location):
     url = self.server_url + '/orgs/'+ orgname
     payload = {'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
     r = requests.patch(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def list_organization_repositories(self, orgname):
     url = self.server_url + '/orgs/'+ orgname +'/repos'
     r = requests.get(url, headers=self.__hdrs)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def search_repos (self, name, limit=100):
     url = self.server_url + '/repos/search'
     payload = {'q': name, 'limit' : limit}
     r = requests.get(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r)
+    return self.__process_response(r)
 
   ################################################################################
   def create_your_repo (self, name, desc, private = False):
@@ -133,7 +134,7 @@ class pygogs(object):
     else:
       payload['private'] = 'false'
     r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r, 201)
+    return self.__process_response(r, 201)
 
   ################################################################################
   def create_organization_repo (self, org, name, desc, private = False):
@@ -144,13 +145,13 @@ class pygogs(object):
     else:
       payload['private'] = 'false'
     r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r, 201)
+    return self.__process_response(r, 201)
 
   ################################################################################
   def delete_repository(self, owner, repo):
     url = self.server_url + '/repos/' + owner + '/' + repo
     r = requests.delete(url, headers=self.__hdrs)
-    return self.process_response(r, 204)
+    return self.__process_response(r, 204)
 
   ################################################################################
   def create_user_repo (self, username, repos, desc, private = False):
@@ -161,4 +162,4 @@ class pygogs(object):
     else:
       payload['private'] = 'false'
     r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.process_response(r, 201)
+    return self.__process_response(r, 201)
