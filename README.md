@@ -8,7 +8,7 @@ It doesn't provide full API support at the moment.
 
 ## How does it work
 
-*pygogs* uses *requests* python package as a backend to sending API to Gogs server.
+*pygogs* uses *requests* python package as a backend for sending data to Gogs server.
 
 ### Authorization on Gogs server
 
