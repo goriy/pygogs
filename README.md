@@ -39,7 +39,7 @@ Simple script example:
     pg = pygogs.pygogs()
 
     # set verbosity level. 0 - quiet, 1 - print some information
-    pg.verbosity(1)
+    pg.verbosity(0)
 
     # setup access token from file
     pg.set_token_from_file ('example.token')
@@ -48,6 +48,12 @@ Simple script example:
 
     # set server url
     pg.set_url ('https://example.com')
+
+    # print some basic information about all user's repositories
+    repolist = pg.list_your_repositories()
+    if (repolist):
+      for repo in repolist:
+        print ('%s [id = %d]' % (repo['full_name'], repo['id']))
 
     # create private repository for current user
     result = pg.create_your_repo ('project1', 'Super project for current user', True)
