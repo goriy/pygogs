@@ -34,7 +34,7 @@ class pygogs(object):
   ################################################################################
   def set_token_from_file (self, token_file):
     f = open(token_file,"r")
-    new_token = f.readline()
+    new_token = f.readline().strip()
     f.close()
     self.set_token (new_token)
 
