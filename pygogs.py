@@ -45,7 +45,7 @@ class pygogs(object):
   def __process_response(self, r, desired_code = 200):
     self.lastcode = r.status_code
     if (r.status_code == desired_code):
-      if (r.headers['content-type'][:16] == 'application/json'):
+      if ('content-type' in r.headers and r.headers['content-type'][:16] == 'application/json'):
         data = json.loads(r.text)
         if self.__verbosity > 0:
           print ("JSON: " + json.dumps(data))
@@ -99,20 +99,6 @@ class pygogs(object):
     return self.__process_response(r)
 
   ################################################################################
-  def create_new_organization(self, username, orgname, full_name, description, website, location):
-    url = self.server_url + '/admin/users/' + username  + '/orgs'
-    payload = {'UserName': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
-    r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.__process_response(r, 201)
-
-  ################################################################################
-  def edit_an_organization(self, orgname, full_name, description, website, location):
-    url = self.server_url + '/orgs/'+ orgname
-    payload = {'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
-    r = requests.patch(url, headers=self.__hdrs, data=payload)
-    return self.__process_response(r)
-
-  ################################################################################
   def list_organization_repositories(self, orgname):
     url = self.server_url + '/orgs/'+ orgname +'/repos'
     r = requests.get(url, headers=self.__hdrs)
@@ -126,26 +112,67 @@ class pygogs(object):
     return self.__process_response(r)
 
   ################################################################################
-  def create_your_repo (self, name, desc, private = False):
-    url = self.server_url + '/user/repos'
-    payload = {'name': name, 'description' : desc}
+  def list_branches(self, owner, repo):
+    url = self.server_url + '/repos/'+ owner + '/' + repo +'/branches'
+    r = requests.get(url, headers=self.__hdrs)
+    return self.__process_response(r)
+
+  ################################################################################
+  def get_branch(self, owner, repo, branch):
+    url = self.server_url + '/repos/'+ owner + '/' + repo +'/branches/' + branch
+    r = requests.get(url, headers=self.__hdrs)
+    return self.__process_response(r)
+
+  ################################################################################
+  def __construct_repo_payload (self, name, description, private, auto_init,
+                                gitignores, license, readme):
+
+    basic_data = {'name': name, 'description' : description}
+    advanced_data = {'gitignores': gitignores, 'license': license, 'readme': readme}
+
     if (private):
-      payload['private'] = 'true'
+      basic_data['private'] = 'true'
     else:
-      payload['private'] = 'false'
+      basic_data['private'] = 'false'
+
+    if (auto_init):
+      basic_data['auto_init'] = 'true'
+      payload = {**basic_data, **advanced_data}
+    else:
+      payload = basic_data
+
+    return payload
+
+  ################################################################################
+  def __create_repo (self, url, name, description, private, auto_init,
+                     gitignores, license, readme):
+
+    payload = self.__construct_repo_payload(name, description, private, auto_init, gitignores, license, readme)
     r = requests.post(url, headers=self.__hdrs, data=payload)
     return self.__process_response(r, 201)
 
   ################################################################################
-  def create_organization_repo (self, org, name, desc, private = False):
-    url = self.server_url + '/org/' + str(org) + '/repos'
-    payload = {'name': name, 'description' : desc}
-    if (private):
-      payload['private'] = 'true'
-    else:
-      payload['private'] = 'false'
-    r = requests.post(url, headers=self.__hdrs, data=payload)
-    return self.__process_response(r, 201)
+  def create_your_repo (self, name, description='',
+                        private = False, auto_init = False,
+                        gitignores = '', license = '', readme = 'Default'):
+    url = self.server_url + '/user/repos'
+    return self.__create_repo(url,name, description, private, auto_init, gitignores, license, readme)
+
+  ################################################################################
+  def create_organization_repo (self, organization, name, description='',
+                        private = False, auto_init = False,
+                        gitignores = '', license = '', readme = 'Default'):
+
+    url = self.server_url + '/org/' + str(organization) + '/repos'
+    return self.__create_repo(url,name, description, private, auto_init, gitignores, license, readme)
+
+  ################################################################################
+  def create_user_repo (self, username, name, description='',
+                        private = False, auto_init = False,
+                        gitignores = '', license = '', readme = 'Default'):
+
+    url = self.server_url + '/admin/users/' + username + '/repos'
+    return self.__create_repo(url,name, description, private, auto_init, gitignores, license, readme)
 
   ################################################################################
   def delete_repository(self, owner, repo):
@@ -153,13 +180,29 @@ class pygogs(object):
     r = requests.delete(url, headers=self.__hdrs)
     return self.__process_response(r, 204)
 
+
   ################################################################################
-  def create_user_repo (self, username, repos, desc, private = False):
-    url = self.server_url + '/admin/users/' + username + '/repos'
-    payload = {'name': name, 'description' : desc}
-    if (private):
-      payload['private'] = 'true'
-    else:
-      payload['private'] = 'false'
-    r = requests.post(url, headers=self.__hdrs, data=payload)
+  def __json_type_header(self):
+    ct = {'content-type': 'application/json; charset=UTF-8'}
+    h = {**self.__hdrs, **ct}
+    return h
+  ################################################################################
+  def create_new_organization(self, username, orgname, full_name='', description='', website='', location=''):
+    url = self.server_url + '/admin/users/' + username  + '/orgs'
+    payload = {'username': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
+    r = requests.post(url, headers=self.__json_type_header(), data=json.dumps(payload))
     return self.__process_response(r, 201)
+
+  ################################################################################
+  def create_my_organization(self, orgname, full_name='', description='', website='', location=''):
+    url = self.server_url + '/user/orgs'
+    payload = {'username': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
+    r = requests.post(url, headers=self.__json_type_header(), data=json.dumps(payload))
+    return self.__process_response(r, 201)
+
+  ################################################################################
+  def edit_an_organization(self, orgname, full_name, description, website, location):
+    url = self.server_url + '/orgs/'+ orgname
+    payload = {'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
+    r = requests.patch(url, headers=self.__hdrs, data=payload)
+    return self.__process_response(r)
