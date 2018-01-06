@@ -30,7 +30,7 @@ Server response is data in *json* format, so it's loaded by means of python's js
 
 ### Implemented
 
-Those API functions are implemented:
+These API functions are implemented:
 
 - [ ] Administration Organizations - [doc](https://github.com/gogits/go-gogs-client/wiki/Administration-Organizations#create-team-of-an-organization)
     - [x] create_new_organization
