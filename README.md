@@ -131,4 +131,4 @@ Simple script example:
 
 File [*example_backup.py*](example_backup.py) is a bit more useful example script.
 It does backup of all your repositories from server to current directory.
-It's does something like incremental backups (by means of git) and could be run even from *crontab*.
+It does something like incremental backup (by means of git) and could be run even from *crontab*.
