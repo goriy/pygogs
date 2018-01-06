@@ -32,23 +32,61 @@ Server response is data in *json* format, so it's loaded by means of python's js
 
 Those API functions are implemented:
 
-* list_your_organizations
-* list_your_repositories
-* list_user_organizations
-* list_user_repositories
-* get_organization
-* get_repository
-* list_organization_repositories
-* search_repos
-* list_branches
-* get_branch
-* create_your_repo
-* create_organization_repo
-* create_user_repo
-* delete_repository
-* create_new_organization
-* create_my_organization
-* edit_an_organization
+- [ ] Administration Organizations [link](https://github.com/gogits/go-gogs-client/wiki/Administration-Organizations#create-team-of-an-organization)
+    - [x] create_new_organization
+    - [x] create_your_organization
+    - [ ] create_team_of_organization
+    - [ ] add_team_membership
+    - [ ] remove_team_membership
+    - [ ] add_or_update_team_repository
+    - [ ] remove_team_repository
+- [x] Administration Repositories [link](https://github.com/gogits/go-gogs-client/wiki/Administration-Repositories)
+    - [x] create_user_repo
+- [ ] Administration Users [link](https://github.com/gogits/go-gogs-client/wiki/Administration-Users)
+    - [ ] create_user
+    - [ ] edit_user
+    - [ ] delete_user
+    - [ ] create_user
+    - [ ] create_a_public_key_for_user
+- [ ] Issues [link](https://github.com/gogits/go-gogs-client/wiki/Issues)
+- [ ] Issues Comments [link](https://github.com/gogits/go-gogs-client/wiki/Issues-Comments)
+- [ ] Issues Labels [link](https://github.com/gogits/go-gogs-client/wiki/Issues-Labels)
+- [ ] Issues Milestones [link](https://github.com/gogits/go-gogs-client/wiki/Issues-Milestones)
+- [ ] Miscellaneous [link](https://github.com/gogits/go-gogs-client/wiki/Miscellaneous)
+- [x] Organizations [link](https://github.com/gogits/go-gogs-client/wiki/Organizations)
+    - [x] list_your_organizations
+    - [x] list_user_organizations
+    - [x] get_organization
+    - [x] edit_an_organization
+- [ ] Organizations Members [link](https://github.com/gogits/go-gogs-client/wiki/Organizations-Members)
+    - [ ] add_or_update_organization_membership
+- [ ] Organizations Teams [link](https://github.com/gogits/go-gogs-client/wiki/Organizations-Teams)
+    - [ ] list_teams_of_an_organization
+- [ ] Repositories [link](https://github.com/gogits/go-gogs-client/wiki/Repositories)
+    - [x] search_repos
+    - [x] list_your_repositories
+    - [x] list_user_repositories
+    - [x] list_organization_repositories
+    - [x] create_your_repo
+    - [x] create_organization_repo
+    - [ ] migrate
+    - [x] get_repository
+    - [x] delete_repository
+    - [x] list_branches
+    - [x] get_branch
+    - [ ] mirror_sync
+- [ ] Repositories Collaborators [link](https://github.com/gogits/go-gogs-client/wiki/Repositories-Collaborators)
+    - [ ] add_user_as_a_collaborator
+- [ ] Repositories Contents [link](https://github.com/gogits/go-gogs-client/wiki/Repositories-Contents)
+    - [ ] download_raw_content
+    - [ ] download_archive
+- [ ] Repositories Deploy Keys [link](https://github.com/gogits/go-gogs-client/wiki/Repositories-Deploy-Keys)
+- [ ] Repositories Webhooks [link](https://github.com/gogits/go-gogs-client/wiki/Repositories-Webhooks)
+- [ ] Users [link](https://github.com/gogits/go-gogs-client/wiki/Users)
+- [ ] Users Emails [link](https://github.com/gogits/go-gogs-client/wiki/Users-Emails)
+- [ ] Users Followers [link](https://github.com/gogits/go-gogs-client/wiki/Users-Followers)
+- [ ] Users Public Keys [link](https://github.com/gogits/go-gogs-client/wiki/Users-Public-Keys)
+
 
 ### Example
 
