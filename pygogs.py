@@ -46,19 +46,21 @@ class pygogs(object):
     self.lastcode = r.status_code
     if (r.status_code == desired_code):
       if ('content-type' in r.headers and r.headers['content-type'].startswith('application/json')):
-        data = json.loads(r.text)
+        data = r.json()
         if self.__verbosity > 0:
           print ("JSON: " + json.dumps(data))
       else:
-        data = r.text
-        if self.__verbosity > 0:
+        data = r.text.strip()
+        if self.__verbosity > 0 and data != '':
           print ('TEXT: ' + data)
       return data
 
     else:
       if self.__verbosity > 0:
         print(r)
-        print(r.text)
+        data = r.text.strip()
+        if data != '':
+          print(data)
       return False
 
 
