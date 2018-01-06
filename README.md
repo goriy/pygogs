@@ -28,7 +28,29 @@ Usage of separate file with token is more preferrable for several reasons:
 
 Server response is data in *json* format, so it's loaded by means of python's json.loads()
 
-### In your script
+### Implemented
+
+Those API functions are implemented:
+
+* list_your_organizations
+* list_your_repositories
+* list_user_organizations
+* list_user_repositories
+* get_organization
+* get_repository
+* list_organization_repositories
+* search_repos
+* list_branches
+* get_branch
+* create_your_repo
+* create_organization_repo
+* create_user_repo
+* delete_repository
+* create_new_organization
+* create_my_organization
+* edit_an_organization
+
+### Example
 
 Simple script example:
 
