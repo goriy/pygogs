@@ -184,7 +184,7 @@ class pygogs(object):
     return self.__process_response(r, 201)
 
   ################################################################################
-  def create_my_organization(self, orgname, full_name='', description='', website='', location=''):
+  def create_your_organization(self, orgname, full_name='', description='', website='', location=''):
     url = self.server_url + '/user/orgs'
     payload = {'username': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
     r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
