@@ -26,8 +26,6 @@ Usage of separate file with token is more preferrable for several reasons:
 
 *pygogs* sends Access Token as a http(s) header.
 
-Server response is data in *json* format, so it's loaded by means of python's json.loads()
-
 ### Implemented
 
 These API functions are implemented:
