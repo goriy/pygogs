@@ -56,7 +56,7 @@ Simple script example:
         print ('%s [id = %d]' % (repo['full_name'], repo['id']))
 
     # create private repository for current user
-    result = pg.create_your_repo ('project1', 'Super project for current user', True)
+    result = pg.create_your_repo (name='project1', description='Super project for current user', private=True)
 
     # check http answer code
     if (pg.lastcode == 404):
@@ -66,5 +66,5 @@ Simple script example:
       print (result['id'])
 
     # create public organization repository
-    result = pg.create_organization_repo ('OCPCorp', 'project2', 'Mega Ultra Super project', False)
+    result = pg.create_organization_repo (organization='OCPCorp', name='project2', description='Mega Ultra Super project')
 ```
