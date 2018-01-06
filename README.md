@@ -88,7 +88,7 @@ Those API functions are implemented:
 - [ ] Users Public Keys - [doc](https://github.com/gogits/go-gogs-client/wiki/Users-Public-Keys)
 
 
-### Example
+### Example 1
 
 Simple script example:
 
@@ -128,3 +128,9 @@ Simple script example:
     # create public organization repository
     result = pg.create_organization_repo (organization='OCPCorp', name='project2', description='Mega Ultra Super project')
 ```
+
+### Example 2
+
+File [*example_backup.py*](example_backup.py) is a bit more useful example script.
+It does backup of all your repositories from server to current directory.
+It's does something like incremental backups (by means of git) and could be run even from *crontab*.
