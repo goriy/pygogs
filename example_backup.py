@@ -40,18 +40,18 @@ if (repolist):
     if not os.path.exists(dirname):
       if verbosity > 0:
         sys.stderr.write("create dir %s\n" % (dirname))
-      if (not dry_run):
+      if not dry_run:
         os.makedirs(dirname)
 
     # if repository directory doesn't exist - clone it
     if not os.path.exists(full_name):
       if verbosity > 0:
         sys.stderr.write("clone %s from  %s\n" % (full_name, url))
-      if (not dry_run):
+      if not dry_run:
         subprocess.run(["git", "clone", "--mirror", url, full_name] + git_extra_options)
 
     else:   # if repository directory exists - fetch data into it
       if verbosity > 0:
         sys.stderr.write("fetch %s from  %s\n" % (full_name, url))
-      if (not dry_run):
+      if not dry_run:
         subprocess.run(["git", "-C", full_name, "fetch", url] + git_extra_options)
