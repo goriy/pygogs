@@ -45,7 +45,7 @@ class pygogs(object):
   def __process_response(self, r, desired_code = 200):
     self.lastcode = r.status_code
     if (r.status_code == desired_code):
-      if ('content-type' in r.headers and r.headers['content-type'][:16] == 'application/json'):
+      if ('content-type' in r.headers and r.headers['content-type'].startswith('application/json')):
         data = json.loads(r.text)
         if self.__verbosity > 0:
           print ("JSON: " + json.dumps(data))
