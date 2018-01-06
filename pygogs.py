@@ -28,7 +28,7 @@ class pygogs(object):
   ################################################################################
   def set_token (self, new_token):
     self.token = new_token
-    self.__hdrs = {'Authorization': 'token ' + new_token}
+    self.__hdrs = {'Authorization': 'token ' + new_token, 'content-type': 'application/json; charset=UTF-8'}
 
   ################################################################################
   def set_token_from_file (self, token_file):
@@ -108,7 +108,7 @@ class pygogs(object):
   def search_repos (self, name, limit=100):
     url = self.server_url + '/repos/search'
     payload = {'q': name, 'limit' : limit}
-    r = requests.get(url, headers=self.__hdrs, data=payload)
+    r = requests.get(url, headers=self.__hdrs, data=json.dumps(payload))
     return self.__process_response(r)
 
   ################################################################################
@@ -127,16 +127,10 @@ class pygogs(object):
   def __construct_repo_payload (self, name, description, private, auto_init,
                                 gitignores, license, readme):
 
-    basic_data = {'name': name, 'description' : description}
-    advanced_data = {'gitignores': gitignores, 'license': license, 'readme': readme}
-
-    if (private):
-      basic_data['private'] = 'true'
-    else:
-      basic_data['private'] = 'false'
+    basic_data = {'name': name, 'description': description, 'private': private}
+    advanced_data = {'auto_init': True, 'gitignores': gitignores, 'license': license, 'readme': readme}
 
     if (auto_init):
-      basic_data['auto_init'] = 'true'
       payload = {**basic_data, **advanced_data}
     else:
       payload = basic_data
@@ -148,7 +142,7 @@ class pygogs(object):
                      gitignores, license, readme):
 
     payload = self.__construct_repo_payload(name, description, private, auto_init, gitignores, license, readme)
-    r = requests.post(url, headers=self.__hdrs, data=payload)
+    r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
     return self.__process_response(r, 201)
 
   ################################################################################
@@ -180,29 +174,23 @@ class pygogs(object):
     r = requests.delete(url, headers=self.__hdrs)
     return self.__process_response(r, 204)
 
-
-  ################################################################################
-  def __json_type_header(self):
-    ct = {'content-type': 'application/json; charset=UTF-8'}
-    h = {**self.__hdrs, **ct}
-    return h
   ################################################################################
   def create_new_organization(self, username, orgname, full_name='', description='', website='', location=''):
     url = self.server_url + '/admin/users/' + username  + '/orgs'
     payload = {'username': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
-    r = requests.post(url, headers=self.__json_type_header(), data=json.dumps(payload))
+    r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
     return self.__process_response(r, 201)
 
   ################################################################################
   def create_my_organization(self, orgname, full_name='', description='', website='', location=''):
     url = self.server_url + '/user/orgs'
     payload = {'username': orgname, 'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
-    r = requests.post(url, headers=self.__json_type_header(), data=json.dumps(payload))
+    r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
     return self.__process_response(r, 201)
 
   ################################################################################
   def edit_an_organization(self, orgname, full_name, description, website, location):
     url = self.server_url + '/orgs/'+ orgname
     payload = {'full_name': full_name, 'description' : description, 'website': website, 'location' : location}
-    r = requests.patch(url, headers=self.__hdrs, data=payload)
+    r = requests.patch(url, headers=self.__hdrs, data=json.dumps(payload))
     return self.__process_response(r)
