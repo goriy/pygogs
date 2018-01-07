@@ -31,11 +31,13 @@ repolist = pg.list_your_repositories()
 
 if (repolist):
   for repo in repolist:
+
     # get repository info
     name = repo['name']
     full_name = repo['full_name']
     dirname = repo['owner']['username']
     url = repo[url_type]
+
     # if user/organization directory doesn't exist - create it
     if not os.path.exists(dirname):
       if verbosity > 0:
