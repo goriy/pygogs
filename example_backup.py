@@ -23,9 +23,9 @@ pg = pygogs.pygogs()
 # set verbosity level. 0 - quiet [default], 1 - print some information
 pg.verbosity(0)
 # setup access token from file
-pg.set_token_from_file ('example.token')
+pg.set_token_from_file('example.token')
 # set server url
-pg.set_url ('https://example.com')
+pg.set_url('https://example.com')
 
 repolist = pg.list_your_repositories()
 
