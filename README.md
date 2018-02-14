@@ -67,7 +67,7 @@ These API functions are implemented:
     - [x] list_organization_repositories
     - [x] create_your_repo
     - [x] create_organization_repo
-    - [ ] migrate
+    - [x] migrate
     - [x] get_repository
     - [x] delete_repository
     - [x] list_branches
