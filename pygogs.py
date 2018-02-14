@@ -7,6 +7,7 @@ class pygogs(object):
     __slots__ = [  # private variables
                  "__verbosity",
                  "__hdrs",
+                 "__verify",
                  # public variables
                  "token",
                  "server_url",
@@ -19,11 +20,16 @@ class pygogs(object):
         self.server_url = ''
         self.token = ''
         self.__hdrs = {'Authorization': 'token 123'}
+        self.__verify = True
         os.linesep = '\n'
 
     ###########################################################################
     def verbosity(self, verb):
         self.__verbosity = verb
+
+    ###########################################################################
+    def ca_bundle(self, cert):
+      self.__verify = cert
 
     ###########################################################################
     def set_token(self, new_token):
@@ -69,62 +75,62 @@ class pygogs(object):
     ###########################################################################
     def list_your_organizations(self):
         url = self.server_url + '/user/orgs'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def list_your_repositories(self):
         url = self.server_url + '/user/repos'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def list_user_organizations(self, username):
         url = self.server_url + '/users/' + username + '/orgs'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def list_user_repositories(self, username):
         url = self.server_url + '/users/' + username + '/repos'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def get_organization(self, orgname):
         url = self.server_url + '/orgs/' + orgname
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def get_repository(self, owner, repo):
         url = self.server_url + '/repos/' + owner + '/' + repo
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def list_organization_repositories(self, orgname):
         url = self.server_url + '/orgs/' + orgname + '/repos'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def search_repos(self, name, limit=100):
         url = self.server_url + '/repos/search'
         payload = {'q': name, 'limit': limit}
-        r = requests.get(url, headers=self.__hdrs, data=json.dumps(payload))
+        r = requests.get(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def list_branches(self, owner, repo):
         url = self.server_url + '/repos/' + owner + '/' + repo + '/branches'
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
     def get_branch(self, owner, repo, branch):
         url = self.server_url + '/repos/' + owner + '/' + repo + '/branches/' + branch
-        r = requests.get(url, headers=self.__hdrs)
+        r = requests.get(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r)
 
     ###########################################################################
@@ -154,7 +160,7 @@ class pygogs(object):
         payload = self.__construct_repo_payload(name, description, private,
                                                 auto_init, gitignores, license,
                                                 readme)
-        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
+        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
         return self.__process_response(r, 201)
 
     ###########################################################################
@@ -183,26 +189,42 @@ class pygogs(object):
     ###########################################################################
     def delete_repository(self, owner, repo):
         url = self.server_url + '/repos/' + owner + '/' + repo
-        r = requests.delete(url, headers=self.__hdrs)
+        r = requests.delete(url, headers=self.__hdrs, verify=self.__verify)
         return self.__process_response(r, 204)
+
+    ###########################################################################
+    def migrate(self, uid, repo_name, clone_addr, description='', mirror=False,
+                                 private=False, do_auth = False, auth_username='', auth_password=''):
+
+        url = self.server_url + '/repos/migrate'
+        basic_data = {'clone_addr': clone_addr, 'uid': uid,
+                      'description': description, 'repo_name': repo_name,
+                      'mirror': mirror, 'private': private}
+        advanced_data = {'auth_username': auth_username, 'auth_password': auth_password}
+        if (do_auth):
+            payload = {**basic_data, **advanced_data}
+        else:
+            payload = basic_data
+        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
+        return self.__process_response(r, 201)
 
     ###########################################################################
     def create_new_organization(self, username, orgname, full_name='', description='', website='', location=''):
         url = self.server_url + '/admin/users/' + username + '/orgs'
         payload = {'username': orgname, 'full_name': full_name, 'description': description, 'website': website, 'location': location}
-        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
+        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
         return self.__process_response(r, 201)
 
     ###########################################################################
     def create_your_organization(self, orgname, full_name='', description='', website='', location=''):
         url = self.server_url + '/user/orgs'
         payload = {'username': orgname, 'full_name': full_name, 'description': description, 'website': website, 'location': location}
-        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload))
+        r = requests.post(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
         return self.__process_response(r, 201)
 
     ###########################################################################
     def edit_an_organization(self, orgname, full_name, description, website, location):
         url = self.server_url + '/orgs/' + orgname
         payload = {'full_name': full_name, 'description': description, 'website': website, 'location': location}
-        r = requests.patch(url, headers=self.__hdrs, data=json.dumps(payload))
+        r = requests.patch(url, headers=self.__hdrs, data=json.dumps(payload), verify=self.__verify)
         return self.__process_response(r)
