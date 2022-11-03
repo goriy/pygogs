@@ -1,4 +1,5 @@
 import os
+import sys
 import requests
 import json
 
@@ -15,12 +16,12 @@ class pygogs(object):
                  ]
 
     ###########################################################################
-    def __init__(self):
+    def __init__(self, server_url = "", ssl_verify = True):
         self.__verbosity = 0
-        self.server_url = ''
+        self.server_url = server_url + '/api/v1'
         self.token = ''
         self.__hdrs = {'Authorization': 'token 123'}
-        self.__verify = True
+        self.__verify = ssl_verify
         os.linesep = '\n'
 
     ###########################################################################
@@ -39,10 +40,13 @@ class pygogs(object):
 
     ###########################################################################
     def set_token_from_file(self, token_file):
-        f = open(token_file, "r")
-        new_token = f.readline().strip()
-        f.close()
-        self.set_token(new_token)
+        if token_file is None:
+          #if self.__verbosity > 0:
+          sys.stderr.write("warning: unable to find token file\n")
+        else:
+          with open(token_file, "r", encoding="utf-8") as f:
+            new_token = f.readline().strip()
+          self.set_token(new_token)
 
     ###########################################################################
     def set_url(self, new_url):
