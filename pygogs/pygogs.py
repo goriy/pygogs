@@ -41,12 +41,15 @@ class pygogs(object):
     ###########################################################################
     def set_token_from_file(self, token_file):
         if token_file is None:
-          #if self.__verbosity > 0:
-          sys.stderr.write("warning: unable to find token file\n")
+            #if self.__verbosity > 0:
+            sys.stderr.write("warning: unable to find token file\n")
         else:
-          with open(token_file, "r", encoding="utf-8") as f:
-            new_token = f.readline().strip()
-          self.set_token(new_token)
+            if (os.path.isfile(token_file)):
+                with open(token_file, "r", encoding="utf-8") as f:
+                    new_token = f.readline().strip()
+                self.set_token(new_token)
+            else:
+                sys.stderr.write("warning: unable to find token file: " + token_file + "\n")
 
     ###########################################################################
     def set_url(self, new_url):

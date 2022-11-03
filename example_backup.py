@@ -18,6 +18,8 @@ dry_run = False
 git_extra_options = ['-q']
 #git_extra_options = []
 
+print("pygogs version:", pygogs.__version__)
+
 # create helper class
 pg = pygogs.pygogs()
 # set verbosity level. 0 - quiet [default], 1 - print some information

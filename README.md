@@ -94,7 +94,7 @@ Simple script example:
     import pygogs
 
     # create helper class
-    pg = pygogs.pygogs()
+    pg = pygogs.pygogs(server_url = 'https://example.com')
 
     # set verbosity level. 0 - quiet, 1 - print some information
     pg.verbosity(0)
@@ -103,9 +103,6 @@ Simple script example:
     pg.set_token_from_file ('example.token')
     # alternatively access token could be setup directly as string
     # pg.set_token ('1234567890abcdef...')
-
-    # set server url
-    pg.set_url ('https://example.com')
 
     # print some basic information about all user's repositories
     repolist = pg.list_your_repositories()
